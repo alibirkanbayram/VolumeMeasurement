@@ -2,7 +2,6 @@
 #include <Stepper.h> // Stepper motor Library
 #include <FirebaseESP32.h> // Firebase Library
 #include <WiFiManager.h> // Wifi Manager Library
-#include <Preferences.h> // Wifi Manager Library
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━ Definitions ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const int motorStep = 200; // Motor step
@@ -21,8 +20,6 @@ int echoPin1=33,echoPin2=26,echoPin3=14;
 
 bool coverStatus=0;
 
-Preferences preferences_nesnesi; // Verileri saklamak için bir Preferences nesnesi oluşturuyoruz.
-
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━ Firebase Definitions ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Database is firebase
 #define DATABASE_URL "url"
@@ -32,13 +29,13 @@ FirebaseAuth auth;
 FirebaseConfig config;
 String path = "path"; // Database path (Database için gerekli yol)
 bool res;
-WiFiManager wm; // Wifi managerden bir nesne ürettik.
+WiFiManager wm; // Wifi manager object
 
 void goBack(){ // Go to back
   digitalWrite(role,LOW); // Relay on
   delay(2); // 2ms wait
   while(!digitalRead(backSwitch)){
-    stepperMotor.step(-(motorAdim)); // Motor adımı ile tur sayısı çarpılır ve bu kadar adım geri gider.
+    stepperMotor.step(-(motorStep)); // The motor step is multiplied by the number of revolutions and it goes back that many steps.
     // delay(1); // Delay function (1-10ms)
   }
   delay(2);
@@ -49,7 +46,7 @@ void goOn(){ // Go to front
   digitalWrite(role,LOW); // Relay on
   delay(2); // 2ms wait
   while(!digitalRead(frontSwitch)){
-    stepperMotor.step(motorAdim); // Motor adımı ile tur sayısı çarpılır ve bu kadar adım geri gider.
+    stepperMotor.step(motorStep; // The motor step is multiplied by the number of revolutions and it goes back that many steps.
     // delay(1); // Delay function (1-10ms)
   }
   delay(2);
@@ -62,7 +59,7 @@ void findLocation(){ // Location finding
   coverStatus=0;
 }
 
-void isObject(){ //
+void isObject(){
   if (!digitalRead(backSwitch))
     goBack();
   if(digitalRead(backIR)){
@@ -95,14 +92,14 @@ void setup(){ // Setup function
   res=wm.autoConnect("Volume","12345678"); // Wifi name and password
 
  if(!res)
-   Serial.println("Wifi bağlantısı kurulamadı!");
+   Serial.println("Wifi connection failed!");
  else
-   Serial.println("Wifi bağlantısı kuruldu.");
+   Serial.println("Wifi connected.");
 
   WiFi.localIP();
   Serial.println(WiFi.localIP());
 
-  // Firebase kurulumları
+  // Firebase definition
   Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
   config.database_url = DATABASE_URL;
   config.signer.tokens.legacy_token = DATABASE_SECRET;

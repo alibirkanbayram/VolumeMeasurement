@@ -3,7 +3,7 @@
 
 Developed for volume measurement. It is a sonar volume sensor that works with high accuracy in measuring the volume of amorphous objects.
 
-***Keep scrolling for [Turkish](#Hacim Ölçümü-)***
+***Keep scrolling for [Turkish](#Hacim Ölçümü)***
 
   
 ## Technologies Used
@@ -17,7 +17,7 @@ Developed for volume measurement. It is a sonar volume sensor that works with hi
 
 Hacim ölçümü için geliştirilmiştir.
 
-***İçin yukarı kaydır [İngilizce](#Volume Measurement-)***
+***İçin yukarı kaydır [İngilizce](#Volume Measurement)***
 
   
 ## Kullanılan Teknoloji

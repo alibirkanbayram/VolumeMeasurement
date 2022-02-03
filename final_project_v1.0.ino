@@ -9,7 +9,7 @@ const int laps = 21.5; // Motor number of laps
 const int motorRPM = 240; // Motorun rpm (step/second)
 //Stepper stepperMotor(motorStep, D8,D7,D6,D5); // Step motor definition (nodemcu)
 Stepper stepperMotor(motorStep, 15,21,4,5); // Step motor definition (esp32)
-// const int relay=13 ; // Motor relay
+const int relay=13 ; // Motor relay
 const String machineID=""; // Machine ID
 const int backSwitch=34; // Back limit switch pin
 const int frontSwitch=35; // Front limit switch pin

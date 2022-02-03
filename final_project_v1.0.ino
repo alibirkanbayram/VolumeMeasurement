@@ -90,10 +90,10 @@ void distanceMeasurement(int trigPin,int echoPin){
 }
 
 void volumeMeasurement(){ // Volume measurement
-  y1=distanceMeasurement();
-  y2=distanceMeasurement();
+  y1=distanceMeasurement(trigPin1,echoPin1);
+  y2=distanceMeasurement(trigPin2,echoPin2);
   y=y1+y2; y= 15-y;
-  h=distanceMeasurement();
+  h=distanceMeasurement(trigPin3,echoPin3);
   if(h<=15)
     h=15-h;
   return x*h;

@@ -17,7 +17,6 @@ const int backIR=36; // Back IR sensor
 const int frontIR=39; // Front IR sensor
 int trigPin1=32,trigPin2=25,trigPin3=27;
 int echoPin1=33,echoPin2=26,echoPin3=14;
-double v=0; // Volume
 
 bool coverStatus=0;
 
@@ -32,25 +31,30 @@ String path = "path"; // Database path (Database için gerekli yol)
 bool res;
 WiFiManager wm; // Wifi manager object
 
+TaskHandle_t Task1;
+TaskHandle_t Task2;
+
+
+
 void goBack(){ // Go to back
   digitalWrite(role,LOW); // Relay on
-  delayMicroseconds(5);
+  delay(2); // 2ms wait
   while(!digitalRead(backSwitch)){
     stepperMotor.step(-(motorStep)); // The motor step is multiplied by the number of revolutions and it goes back that many steps.
     // delay(1); // Delay function (1-10ms)
   }
-  delayMicroseconds(5);
+  delay(2);
   digitalWrite(role,HIGH);
-  // Firebase.setBool(fbdo, path + "/COVER_STATUS", false);
+  // Firebase.setBool(fbdo, path + "/COVER_STATUS", true);
 }
 void goOn(){ // Go to front
   digitalWrite(role,LOW); // Relay on
-  delayMicroseconds(5);
+  delay(2); // 2ms wait
   while(!digitalRead(frontSwitch)){
-    stepperMotor.step(motorStep); // The motor step is multiplied by the number of revolutions and it goes back that many steps.
+    stepperMotor.step(motorStep; // The motor step is multiplied by the number of revolutions and it goes back that many steps.
     // delay(1); // Delay function (1-10ms)
   }
-  delayMicroseconds(5);
+  delay(2);
   digitalWrite(role,HIGH);
   // Firebase.setBool(fbdo, path + "/COVER_STATUS", true);
 }
@@ -64,16 +68,10 @@ void isObject(){
   if (!digitalRead(backSwitch))
     goBack();
   if(digitalRead(backIR)){
-    digitalWrite(role,LOW); // Relay on
-    delayMicroseconds(5);
-    while(!digitalRead(frontIR))
-      stepperMotor.step(motorStep);
     while (digitalRead(frontSwitch)){
-      stepperMotor.step(motorStep/20); // The motor step is multiplied by the number of revolutions and it goes back that many steps.
-      v+=volumeMeasurement()*0.1*; // Sensibility 0.01 and cm->mm == 0.1
+      goOn();
+      volumeMeasurement();
     }
-    Serial.print("Volume measurement : ");
-    Serial.println(v);
     goBack();
   }
 }
@@ -90,9 +88,9 @@ void distanceMeasurement(int trigPin,int echoPin){
 }
 
 void volumeMeasurement(){ // Volume measurement
-  y1=distanceMeasurement();
-  y2=distanceMeasurement();
-  y=y1+y2; y= 15-y;
+  x1=distanceMeasurement();
+  x2=distanceMeasurement();
+  x=x1+x2; x= 15-x;
   h=distanceMeasurement();
   if(h<=15)
     h=15-h;
@@ -124,8 +122,51 @@ void setup(){ // Setup function
   pinMode(backIR,INPUT); pinMode(frontIR,INPUT);
 
   findLocation(); // Finding Location
+
+  xTaskCreatePinnedToCore( // Multitasking CORE0
+                    Task1code,   /* Task function. */
+                    "Task1",     /* name of task. */
+                    10000,       /* Stack size of task */
+                    NULL,        /* parameter of the task */
+                    1,           /* priority of the task */
+                    &Task1,      /* Task handle to keep track of created task */
+                    0);          /* pin task to core 0 */                  
+  //create a task that will be executed in the Task2code() function, with priority 1 and executed on core 1
+  xTaskCreatePinnedToCore( // Multitasking CORE1
+                    Task2code,   /* Task function. */
+                    "Task2",     /* name of task. */
+                    10000,       /* Stack size of task */
+                    NULL,        /* parameter of the task */
+                    1,           /* priority of the task */
+                    &Task2,      /* Task handle to keep track of created task */
+                    1);          /* pin task to core 1 */
+}
+
+//Task1code: blinks an LED every 1000 ms
+void Task1code( void * pvParameters ){
+  Serial.print("Task1 running on core ");
+  Serial.println(xPortGetCoreID());
+
+  for(;;){
+    digitalWrite(led1, HIGH);
+    delay(1000);
+    digitalWrite(led1, LOW);
+    delay(1000);
+  } 
+}
+
+//Task2code: blinks an LED every 700 ms
+void Task2code( void * pvParameters ){
+  Serial.print("Task2 running on core ");
+  Serial.println(xPortGetCoreID());
+
+  for(;;){
+    digitalWrite(led2, HIGH);
+    delay(700);
+    digitalWrite(led2, LOW);
+    delay(700);
+  }
 }
 
 void loop(){ // Loop function
-  isObject();
 }

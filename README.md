@@ -3,11 +3,7 @@
 
 Developed for volume measurement. It is a sonar volume sensor that works with high accuracy in measuring the volume of amorphous objects.
 
-
-
-## Screenshots
-
-![Photo](url)
+***Keep scrolling for [Turkish](#Hacim Ölçümü-)***
 
   
 ## Technologies Used
@@ -16,6 +12,24 @@ Developed for volume measurement. It is a sonar volume sensor that works with hi
 
 **IDE:** Arduino IDE, ATOM and Visual Studio Code
 
+
+# Hacim Ölçümü
+
+Hacim ölçümü için geliştirilmiştir.
+
+***İçin yukarı kaydır [İngilizce](#Volume Measurement-)***
+
+  
+## Kullanılan Teknoloji
+
+**Yazılım dili:** Cpp
+
+**Geliştirme Ortamı:** Arduino IDE, ATOM and Visual Studio Code
+  
+## Photos/Görüntüler
+
+![Photo](url)
+  
   
 ## Authors and Acknowledgments
 

@@ -2,18 +2,18 @@
 #include <FirebaseESP32.h> // Firebase Library
 #include <WiFiManager.h> // Wifi Manager Library
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━ Definitions ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const int dirPin = 2;
-const int stepPin = 3;
+const int dirPin =22;
+const int stepPin =23;
 const int stepsPerRevolution = 200;
 const int stepMotorDelay=50;
-const int relay=13 ; // Motor relay
+// const int relay=13 ; // Motor relay
 const String machineID=""; // Machine ID
 const int backSwitch=34; // Back limit switch pin
 const int frontSwitch=35; // Front limit switch pin
 const int backIR=36; // Back IR sensor
 const int frontIR=39; // Front IR sensor
 int trigPin1=32,trigPin2=25,trigPin3=27;
-int echoPin1=33,echoPin2=26,echoPin3=14;
+int echoPin1=33,echoPin2=26,echoPin3=14;  
 double v=0; // Volume
 bool coverStatus=false;
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━ Firebase Definitions ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -33,7 +33,7 @@ void motorWork(){
 	}
 }
 void goBack(){ // Go to back
-  digitalWrite(role,LOW); // Relay on
+  // digitalWrite(relay,LOW); // Relay on
   delayMicroseconds(5);
   while(!digitalRead(backSwitch)){
     digitalWrite(dirPin, LOW);
@@ -41,19 +41,19 @@ void goBack(){ // Go to back
     // delay(1); // Delay function (1-10ms)
   }
   delayMicroseconds(5);
-  digitalWrite(role,HIGH);
+  // digitalWrite(relay,HIGH);
   // Firebase.setBool(fbdo, path + "/COVER_STATUS", false);
 }
 void goOn(){ // Go to front
-  digitalWrite(role,LOW); // Relay on
-  delayMicroseconds(5);
+  // digitalWrite(relay,LOW); // Relay on
+  // delayMicroseconds(5);
   while(!digitalRead(frontSwitch)){
     digitalWrite(dirPin, HIGH);
     motorWork();// The motor step is multiplied by the number of revolutions and it goes back that many steps.
     // delay(1); // Delay function (1-10ms)
   }
-  delayMicroseconds(5);
-  digitalWrite(role,HIGH);
+  // delayMicroseconds(5);
+  // digitalWrite(relay,HIGH);
   // Firebase.setBool(fbdo, path + "/COVER_STATUS", true);
 }
 void findLocation(){ // Location finding
@@ -65,8 +65,8 @@ void isObject(){
   if (!digitalRead(backSwitch))
     findLocation();
   if(digitalRead(backIR)){
-    digitalWrite(role,LOW); // Relay on
-    delayMicroseconds(5);
+    // digitalWrite(relay,LOW); // Relay on
+    // delayMicroseconds(5);
     digitalWrite(dirPin, LOW);
     while(!digitalRead(frontIR))      
       motorWork();

@@ -3,8 +3,8 @@
 # from object_detector import *
 
 # ━━━━━━━━━━━━━━━━━━━━━ Desktop Library ━━━━━━━━━━━━━━━━━━━━━
-import cv2
-import utlis
+import cv2, utlis
+# import RPi.GPIO as GPIO
 
 # ━━━━━━━━━━━━━━━━━━━━━ Firebase definition ━━━━━━━━━━━━━━━━━━━━━
 # config = {
@@ -25,11 +25,9 @@ import utlis
 webcam,path,cap,scale =True, 'phone.jpg', cv2.VideoCapture(0), 3
 wP,hP=210 *scale,297 *scale
 
-cap.set(10,160)
-cap.set(3,1920)
-cap.set(4,1080)
-
-
+# cap.set(10,160)
+# cap.set(9,1920)
+# cap.set(16,1080)
 
 # ━━━━━━━━━━━━━━━━━━━━━ Area Measurement function ━━━━━━━━━━━━━━━━━━━━━
 def areaMeasure(): # Area Measurement
@@ -46,8 +44,8 @@ def areaMeasure(): # Area Measurement
             for obj in conts2:
                 cv2.polylines(imgContours2,[obj[2]],True,(0,255,0),2)
                 nPoints = utlis.reorder(obj[2])
-                nW = round((utlis.findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
-                nH = round((utlis.findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
+                nH = round((utlis.findDis(nPoints[0][0]//scale,nPoints[1][0]//scale)/10),1)
+                nW = round((utlis.findDis(nPoints[0][0]//scale,nPoints[2][0]//scale)/10),1)
                 cv2.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[1][0][0], nPoints[1][0][1]),(255, 0, 255), 3, 8, 0, 0.05)
                 cv2.arrowedLine(imgContours2, (nPoints[0][0][0], nPoints[0][0][1]), (nPoints[2][0][0], nPoints[2][0][1]),(255, 0, 255), 3, 8, 0, 0.05)
                 x, y, w, h = obj[3]
@@ -57,6 +55,7 @@ def areaMeasure(): # Area Measurement
     img = cv2.resize(img,(0,0),None,0.5,0.5)
     cv2.imshow('Original Image',img)
     cv2.waitKey(1)
+    # cv2.destroyAllWindows()
 
 # ━━━━━━━━━━━━━━━━━━━━━ Distance function ━━━━━━━━━━━━━━━━━━━━━
 # def distance(): # Distance
@@ -76,17 +75,18 @@ def areaMeasure(): # Area Measurement
 #     return distance
 
 # def volumeMeasure():
-#     distanceValue=distance()
-#     if(distance<=40):
-#         return distance()*areaMeasure
+#     # distanceValue=distance()
+#     return distance()*areaMeasure()
+#     # if(distance<=40):
+#         # return distance()*areaMeasure
 
 # ━━━━━━━━━━━━━━━━━━━━━ Setup function ━━━━━━━━━━━━━━━━━━━━━
 # def setup(): #Setup
 #     global db,company,path,machineID,errorcode
 #     global hourNow,tempHour
-#     global TRIG_Pin,ECHO_Pin
 #     GPIO.setwarnings(False)
 #     GPIO.setmode(GPIO.BCM)
+#     global TRIG_Pin,ECHO_Pin
 #     company=path.child("SETUP").child(machineID).get().val()
 #     print(company)
 #     path=db.child("COMPANY").child(company).child(machineID)
